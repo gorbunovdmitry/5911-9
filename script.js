@@ -139,7 +139,7 @@ function renderConfirm() {
 function renderSuccess() {
   document.title = 'Спасибо!';
   document.getElementById('app').innerHTML = `
-    <div class="moai"></div>
+    <img src="img/success.png" alt="Успех" class="success-img">
     <h2 style="text-align:center;">Только тссс</h2>
     <p style="text-align:center;font-size:1.2rem;">Вы поучаствовали в очень важном исследовании, которое поможет улучшить продукт. Вы – наш герой!</p>
   `;
