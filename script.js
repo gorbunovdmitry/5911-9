@@ -112,9 +112,8 @@ function renderConfirm() {
   document.getElementById('app').innerHTML = `
     <div class="header-row">
       <button id="backBtn" aria-label="Назад">
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-          <polyline points="26,8 12,20 26,32" stroke="#040413" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/>
-          <line x1="12" y1="20" x2="32" y2="20" stroke="#040413" stroke-width="4" stroke-linecap="square"/>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M19.6799 11H7.96795L13.3439 5.4L11.9999 4L4.31995 12L11.9999 20L13.3439 18.6L7.96795 13H19.6799V11Z" fill="#030306" fill-opacity="0.88"/>
         </svg>
       </button>
     </div>

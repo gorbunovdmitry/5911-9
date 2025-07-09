@@ -166,13 +166,14 @@ input:focus {
 }
 /* --- ОТСТУПЫ ДЛЯ ЭКРАНОВ --- */
 .screen-title {
-  margin-top: 70px;
+  margin-top: 65px;
   margin-bottom: 24px;
 }
 .screen-title-confirm {
   margin-top: 24px;
   margin-bottom: 24px;
   padding-left: 0;
+  font-size: 1.25rem;
 }
 #backBtn {
   background: none;
