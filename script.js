@@ -55,7 +55,7 @@ function renderCalculator() {
   document.title = 'Рассрочка';
   const isAmountValid = state.amount >= MIN_AMOUNT && state.amount <= MAX_AMOUNT;
   document.getElementById('app').innerHTML = `
-    <h1 class="screen-title">Получите до 300 000 ₽<br>в рассрочку</h1>
+    <h2 class="screen-title">Получите до&nbsp;300&nbsp;000&nbsp;₽&nbsp;в&nbsp;рассрочку</h2>
     <p style="margin-bottom:24px;">Деньги придут на вашу карту. И не нужно идти в банк</p>
     <label for="amount" style="color:#888;font-size:1.1rem;">Введите сумму</label>
     <input id="amount" type="number" value="${state.amount}" autocomplete="off" class="${isAmountValid ? '' : 'input-error'}" />
