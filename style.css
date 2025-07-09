@@ -168,12 +168,13 @@ input:focus {
 .screen-title {
   margin-top: 65px;
   margin-bottom: 24px;
+  font-size: 1.5rem;
 }
 .screen-title-confirm {
   margin-top: 24px;
   margin-bottom: 24px;
   padding-left: 0;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
 }
 #backBtn {
   background: none;
