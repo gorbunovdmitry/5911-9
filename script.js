@@ -53,7 +53,9 @@ function renderCalculator() {
   state.payment = calcPayment(state.amount, state.term);
   state.serviceFee = calcServiceFee(state.amount, state.term);
   document.title = 'Рассрочка';
-  const isAmountValid = state.amount >= MIN_AMOUNT && state.amount <= MAX_AMOUNT;
+  // Проверка валидности суммы
+  const amountNum = parseInt(state.amount, 10);
+  const isAmountValid = amountNum >= MIN_AMOUNT && amountNum <= MAX_AMOUNT;
   document.getElementById('app').innerHTML = `
     <h2 class="screen-title">Получите до&nbsp;300&nbsp;000&nbsp;₽&nbsp;в&nbsp;рассрочку</h2>
     <p style="margin-bottom:24px;">Деньги придут на вашу карту. И не нужно идти в банк</p>
@@ -71,8 +73,7 @@ function renderCalculator() {
     <button class="button" id="nextBtn" ${isAmountValid ? '' : 'disabled'}>Продолжить</button>
   `;
   document.getElementById('amount').addEventListener('input', e => {
-    let val = e.target.value.replace(/\D/g, '');
-    state.amount = val ? parseInt(val) : '';
+    state.amount = e.target.value;
     renderCalculator();
   });
   document.querySelectorAll('.term-btn').forEach(btn => {
