@@ -50,6 +50,14 @@ function render() {
 }
 
 function renderCalculator() {
+  // Сохраняем фокус и позицию курсора
+  let selectionStart = null, selectionEnd = null, wasFocused = false;
+  const amountInput = document.getElementById('amount');
+  if (amountInput && document.activeElement === amountInput) {
+    wasFocused = true;
+    selectionStart = amountInput.selectionStart;
+    selectionEnd = amountInput.selectionEnd;
+  }
   state.payment = calcPayment(state.amount, state.term);
   state.serviceFee = calcServiceFee(state.amount, state.term);
   document.title = 'Рассрочка';
@@ -72,6 +80,14 @@ function renderCalculator() {
     </div>
     <button class="button" id="nextBtn" ${isAmountValid ? '' : 'disabled'}>Продолжить</button>
   `;
+  // После рендера восстанавливаем фокус и позицию курсора
+  const newAmountInput = document.getElementById('amount');
+  if (wasFocused && newAmountInput) {
+    newAmountInput.focus();
+    if (selectionStart !== null && selectionEnd !== null) {
+      newAmountInput.setSelectionRange(selectionStart, selectionEnd);
+    }
+  }
   document.getElementById('amount').addEventListener('input', e => {
     state.amount = e.target.value;
     renderCalculator();
