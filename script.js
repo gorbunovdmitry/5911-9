@@ -100,6 +100,9 @@ function renderCalculator() {
   });
   if (isAmountValid) {
     document.getElementById('nextBtn').addEventListener('click', () => {
+      if (typeof gtag === 'function') {
+        gtag('event', 'continue_click');
+      }
       location.hash = 'confirm';
     });
   }
