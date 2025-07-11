@@ -1,13 +1,13 @@
 // --- Константы ---
 const RATE = 0.20; // 20% годовых
 const MIN_AMOUNT = 1000;
-const MAX_AMOUNT = 300000;
+const MAX_AMOUNT = 100000;
 const TERMS = [3, 6, 9, 12];
 const STORAGE_KEY = 'installment-completed';
 
 // --- Состояние ---
 let state = {
-  amount: 40000,
+  amount: 100000,
   term: 12,
   payment: null,
   serviceFee: null
@@ -50,44 +50,38 @@ function render() {
 }
 
 function renderCalculator() {
-  // Сохраняем фокус и позицию курсора
-  let selectionStart = null, selectionEnd = null, wasFocused = false;
-  const amountInput = document.getElementById('amount');
-  if (amountInput && document.activeElement === amountInput) {
-    wasFocused = true;
-    selectionStart = amountInput.selectionStart;
-    selectionEnd = amountInput.selectionEnd;
-  }
-  state.payment = calcPayment(state.amount, state.term);
-  state.serviceFee = calcServiceFee(state.amount, state.term);
   document.title = 'Рассрочка';
-  // Проверка валидности суммы
-  const amountNum = parseInt(state.amount, 10);
-  const isAmountValid = amountNum >= MIN_AMOUNT && amountNum <= MAX_AMOUNT;
-  document.getElementById('app').innerHTML = `
-    <h2 class="screen-title">Получите до&nbsp;300&nbsp;000&nbsp;₽&nbsp;в&nbsp;рассрочку</h2>
+  const app = document.getElementById('app');
+  // Если поле уже есть, не пересоздаём его, а только обновляем связанные части
+  if (document.getElementById('amount')) {
+    // Только обновляем связанные значения
+    const amountNum = parseInt(state.amount, 10);
+    const isAmountValid = amountNum >= MIN_AMOUNT && amountNum <= MAX_AMOUNT;
+    state.payment = calcPayment(state.amount, state.term);
+    state.serviceFee = calcServiceFee(state.amount, state.term);
+    document.querySelector('.card-title').textContent = formatMoney(state.payment) + ' в месяц';
+    document.querySelector('.card small').textContent = 'включая плату за услугу';
+    document.getElementById('amount').className = isAmountValid ? '' : 'input-error';
+    document.getElementById('nextBtn').disabled = !isAmountValid;
+    return;
+  }
+  // Первый рендер — создаём всю разметку
+  app.innerHTML = `
+    <h2 class="screen-title">Получите до&nbsp;100&nbsp;000&nbsp;₽&nbsp;в&nbsp;рассрочку</h2>
     <p style="margin-bottom:24px;">Деньги придут на вашу карту. И не нужно идти в банк</p>
     <label for="amount" style="color:#888;font-size:1.1rem;">Введите сумму</label>
-    <input id="amount" type="number" value="${state.amount}" autocomplete="off" class="${isAmountValid ? '' : 'input-error'}" />
-    <div style="color:#888;font-size:1rem;margin-bottom:16px;">от 1 000 ₽ до 300 000 ₽</div>
+    <input id="amount" type="number" value="${state.amount}" autocomplete="off" />
+    <div style="color:#888;font-size:1rem;margin-bottom:16px;">от 1 000 ₽ до 100 000 ₽</div>
     <div style="color:#888;font-size:1.1rem;">Выберите срок</div>
     <div class="term-btns">
       ${TERMS.map(term => `<button class="term-btn${state.term === term ? ' selected' : ''}" data-term="${term}">${term} мес</button>`).join('')}
     </div>
     <div class="card">
-      <div class="card-title">${formatMoney(state.payment)} в месяц</div>
+      <div class="card-title">${formatMoney(calcPayment(state.amount, state.term))} в месяц</div>
       <small>включая плату за услугу</small>
     </div>
-    <button class="button" id="nextBtn" ${isAmountValid ? '' : 'disabled'}>Продолжить</button>
+    <button class="button" id="nextBtn">Продолжить</button>
   `;
-  // После рендера восстанавливаем фокус и позицию курсора
-  const newAmountInput = document.getElementById('amount');
-  if (wasFocused && newAmountInput) {
-    newAmountInput.focus();
-    if (selectionStart !== null && selectionEnd !== null) {
-      newAmountInput.setSelectionRange(selectionStart, selectionEnd);
-    }
-  }
   document.getElementById('amount').addEventListener('input', e => {
     state.amount = e.target.value;
     renderCalculator();
@@ -98,14 +92,12 @@ function renderCalculator() {
       renderCalculator();
     });
   });
-  if (isAmountValid) {
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      if (typeof gtag === 'function') {
-        gtag('event', 'continue_click');
-      }
-      location.hash = 'confirm';
-    });
-  }
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (typeof gtag === 'function') {
+      gtag('event', 'continue_click');
+    }
+    location.hash = 'confirm';
+  });
 }
 
 function renderConfirm() {
@@ -123,7 +115,7 @@ function renderConfirm() {
     <h1 class="screen-title-confirm">Всё проверьте, и можно оформлять</h1>
     <ul class="confirm-list">
       <li><span class="label">Всего в рассрочку</span><span class="value">${formatMoney(state.amount)}</span></li>
-      <li><span class="label">Плата за услугу</span><span class="value">${formatMoneyPrecise(state.serviceFee)} в год</span></li>
+      <li><span class="label">Плата за услугу</span><span class="value">${formatMoneyPrecise(state.serviceFee)}</span></li>
       <li><span class="label">Платёж в месяц</span><span class="value">${formatMoney(state.payment)}</span></li>
       <li><span class="label">Срок</span><span class="value">${state.term} месяцев</span></li>
     </ul>
