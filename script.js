@@ -169,7 +169,7 @@ function renderConfirm() {
     }
     sendYMEvent('5639_click_agreement_make_deal_var1', params);
     // Отправка в Google Таблицу через Apps Script Web App
-    fetch('https://script.google.com/macros/s/AKfycbwM2GTWnNbmr3UCbqTp89jVtEqP1dA-t6PwC4kKr1xJxg2vgBBvhdlyzNWQe1fCG8RF/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbyOBXvaN8F4lclx-FxypOtSSZwTBG-U2cBkSEuHULoiuuC9zYXiK9QrfRwGSTNpyv9T/exec', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params)
