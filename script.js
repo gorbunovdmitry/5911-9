@@ -127,6 +127,10 @@ function renderConfirm() {
   state.payment = calcPayment(state.amount, state.term);
   state.serviceFee = calcServiceFee(state.amount, state.term);
   document.title = 'Подтверждение';
+  if (typeof gtag === 'function') {
+    gtag('event', '5639_page_view_agreement_var1');
+  }
+  sendYMEvent('5639_page_view_agreement_var1');
   document.getElementById('app').innerHTML = `
     <div class="header-row">
       <button id="backBtn" aria-label="Назад">
