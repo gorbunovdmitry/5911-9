@@ -5,6 +5,9 @@ const MAX_AMOUNT = 100000;
 const TERMS = [3, 6, 9, 12];
 const STORAGE_KEY = 'installment-completed';
 
+// Вариант лендинга
+const VARIANT = 'ghk_5639_var1';
+
 // --- Состояние ---
 let state = {
   amount: 100000,
@@ -33,6 +36,12 @@ function calcServiceFee(amount, term) {
   return totalInterest;
 }
 
+function sendYMEvent(event, params = {}) {
+  if (typeof ym === 'function') {
+    ym(96171108, 'reachGoal', event, params);
+  }
+}
+
 // --- Рендеринг ---
 function render() {
   if (localStorage.getItem(STORAGE_KEY) === 'true') {
@@ -52,9 +61,8 @@ function render() {
 function renderCalculator() {
   document.title = 'Рассрочка';
   const app = document.getElementById('app');
-  // Если поле уже есть, не пересоздаём его, а только обновляем связанные части
+  // Если поле уже есть, не пересоздаём всю форму, а только обновляем связанные части
   if (document.getElementById('amount')) {
-    // Только обновляем связанные значения
     const amountNum = parseInt(state.amount, 10);
     const isAmountValid = amountNum >= MIN_AMOUNT && amountNum <= MAX_AMOUNT;
     state.payment = calcPayment(state.amount, state.term);
@@ -63,9 +71,23 @@ function renderCalculator() {
     document.querySelector('.card small').textContent = 'включая плату за услугу';
     document.getElementById('amount').className = isAmountValid ? '' : 'input-error';
     document.getElementById('nextBtn').disabled = !isAmountValid;
+    // Ререндерим только блок кнопок месяцев
+    const termBtns = document.querySelector('.term-btns');
+    termBtns.innerHTML = TERMS.map(term => `<button class="term-btn${state.term === term ? ' selected' : ''}" data-term="${term}">${term} мес</button>`).join('');
+    termBtns.querySelectorAll('.term-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        state.term = parseInt(btn.dataset.term);
+        renderCalculator();
+      });
+    });
     return;
   }
   // Первый рендер — создаём всю разметку
+  // Событие просмотра экрана выбора условий рассрочки только при первом рендере
+  if (typeof gtag === 'function') {
+    gtag('event', '5639_page_view_choose_loan_var1');
+  }
+  sendYMEvent('5639_page_view_choose_loan_var1');
   app.innerHTML = `
     <h2 class="screen-title">Получите до&nbsp;100&nbsp;000&nbsp;₽&nbsp;в&nbsp;рассрочку</h2>
     <p style="margin-bottom:24px;">Деньги придут на вашу карту. И не нужно идти в банк</p>
@@ -94,8 +116,9 @@ function renderCalculator() {
   });
   document.getElementById('nextBtn').addEventListener('click', () => {
     if (typeof gtag === 'function') {
-      gtag('event', 'continue_click');
+      gtag('event', '5639_click_continue_var1');
     }
+    sendYMEvent('5639_click_continue_var1');
     location.hash = 'confirm';
   });
 }
@@ -127,6 +150,18 @@ function renderConfirm() {
     location.hash = '';
   });
   document.getElementById('submitBtn').addEventListener('click', () => {
+    // Собираем параметры
+    const params = {
+      date: Date.now(),
+      variant: VARIANT,
+      sum: state.amount,
+      period: state.term + ' мес',
+      payment: state.payment
+    };
+    if (typeof gtag === 'function') {
+      gtag('event', '5639_click_agreement_make_deal_var1', params);
+    }
+    sendYMEvent('5639_click_agreement_make_deal_var1', params);
     location.hash = 'success';
   });
 }
@@ -145,6 +180,11 @@ function renderSuccess() {
   window.onpopstate = function() {
     window.history.go(1);
   };
+  // Событие просмотра финальной страницы
+  if (typeof gtag === 'function') {
+    gtag('event', '5639_end_page_view_var1');
+  }
+  sendYMEvent('5639_end_page_view_var1');
 }
 
 // --- Инициализация ---
