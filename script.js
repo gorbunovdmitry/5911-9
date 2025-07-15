@@ -127,10 +127,12 @@ function renderConfirm() {
   state.payment = calcPayment(state.amount, state.term);
   state.serviceFee = calcServiceFee(state.amount, state.term);
   document.title = 'Подтверждение';
-  if (typeof gtag === 'function') {
-    gtag('event', '5639_page_view_agreement_var1');
-  }
-  sendYMEvent('5639_page_view_agreement_var1');
+  setTimeout(() => {
+    if (typeof gtag === 'function') {
+      gtag('event', '5639_page_view_agreement_var1');
+    }
+    sendYMEvent('5639_page_view_agreement_var1');
+  }, 0);
   document.getElementById('app').innerHTML = `
     <div class="header-row">
       <button id="backBtn" aria-label="Назад">
@@ -166,6 +168,12 @@ function renderConfirm() {
       gtag('event', '5639_click_agreement_make_deal_var1', params);
     }
     sendYMEvent('5639_click_agreement_make_deal_var1', params);
+    // Отправка в Google Таблицу через Apps Script Web App
+    fetch('https://script.google.com/macros/s/AKfycbwM2GTWnNbmr3UCbqTp89jVtEqP1dA-t6PwC4kKr1xJxg2vgBBvhdlyzNWQe1fCG8RF/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
     location.hash = 'success';
   });
 }
