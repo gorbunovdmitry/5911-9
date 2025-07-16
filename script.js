@@ -170,11 +170,13 @@ function renderConfirm() {
       gtag('event', '5639_click_agreement_make_deal_var1', params);
     }
     sendYMEvent('5639_click_agreement_make_deal_var1', params);
-    // Отправка в Google Таблицу через Apps Script Web App
+    // Отправка в Google Таблицу через Apps Script Web App (обход CORS)
+    const formData = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => formData.append(key, value));
     fetch('https://script.google.com/macros/s/AKfycbzKfqZkHy_KQzMPKQzXfCokd4zy3w8i7ypDL_8j1bDPEWDC7jLcq4uqnk3MZt0sQ/exec', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params)
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString()
     });
     location.hash = 'success';
   });
