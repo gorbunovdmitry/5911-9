@@ -158,9 +158,12 @@ function renderConfirm() {
     location.hash = '';
   });
   document.getElementById('submitBtn').addEventListener('click', () => {
+    // Делаем кнопку неактивной, чтобы предотвратить повторные отправки
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
     // Собираем параметры
     const params = {
-      date: Date.now(),
+      date: new Date().toLocaleString('ru-RU'),
       variant: VARIANT,
       sum: state.amount,
       period: state.term + ' мес',
@@ -170,15 +173,24 @@ function renderConfirm() {
       gtag('event', '5639_click_agreement_make_deal_var1', params);
     }
     sendYMEvent('5639_click_agreement_make_deal_var1', params);
-    // Отправка в Google Таблицу через Apps Script Web App (обход CORS)
-    const formData = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => formData.append(key, value));
-    fetch('https://script.google.com/macros/s/AKfycbzKfqZkHy_KQzMPKQzXfCokd4zy3w8i7ypDL_8j1bDPEWDC7jLcq4uqnk3MZt0sQ/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbyxpyRlyk__XIl5Ih7c0RhK8PIAuqOmmr9MH6RaNgIA4rGg75xVW1FOCbvcS8TbEk2b/exec', {
+      redirect: 'follow',
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: formData.toString()
-    });
-    location.hash = 'success';
+      body: JSON.stringify({
+        date: params.date,
+        variant: params.variant,
+        sum: params.sum,
+        period: params.period,
+        payment: params.payment
+      }),
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+    })
+    .then(() => {
+      location.hash = 'success';
+    })
+    .catch(() => { location.hash = 'success'; });
   });
 }
 
