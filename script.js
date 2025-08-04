@@ -87,9 +87,9 @@ function renderCalculator() {
   // Первый рендер — создаём всю разметку
   // Событие просмотра экрана выбора условий рассрочки только при первом рендере
   if (typeof gtag === 'function') {
-    gtag('event', '5639_page_view_choose_loan_var1');
+    gtag('event', '5911_page_view_choose_loan_var9');
   }
-  sendYMEvent('5639_page_view_choose_loan_var1');
+  sendYMEvent('5911_page_view_choose_loan_var9');
   app.innerHTML = `
     <h2 class="screen-title">Получите до&nbsp;100&nbsp;000&nbsp;₽</h2>
     <p style="margin-bottom:24px;">Деньги придут на вашу карту. И не нужно идти в банк</p>
@@ -118,9 +118,9 @@ function renderCalculator() {
   });
   document.getElementById('nextBtn').addEventListener('click', () => {
     if (typeof gtag === 'function') {
-      gtag('event', '5639_click_continue_var1');
+      gtag('event', '5911_click_continue_var9');
     }
-    sendYMEvent('5639_click_continue_var1');
+    sendYMEvent('5911_click_continue_var9');
     location.hash = 'confirm';
   });
 }
@@ -131,9 +131,9 @@ function renderConfirm() {
   document.title = 'Подтверждение';
   setTimeout(() => {
     if (typeof gtag === 'function') {
-      gtag('event', '5639_page_view_agreement_var1');
+      gtag('event', '5911_page_view_agreement_var9');
     }
-    sendYMEvent('5639_page_view_agreement_var1');
+    sendYMEvent('5911_page_view_agreement_var9');
   }, 0);
   document.getElementById('app').innerHTML = `
     <div class="header-row">
@@ -170,9 +170,9 @@ function renderConfirm() {
       payment: state.payment
     };
     if (typeof gtag === 'function') {
-      gtag('event', '5639_click_agreement_make_deal_var1', params);
+      gtag('event', '5911_click_agreement_make_deal_var9', params);
     }
-    sendYMEvent('5639_click_agreement_make_deal_var1', params);
+    sendYMEvent('5911_click_agreement_make_deal_var9', params);
     fetch('https://script.google.com/macros/s/AKfycbyxpyRlyk__XIl5Ih7c0RhK8PIAuqOmmr9MH6RaNgIA4rGg75xVW1FOCbvcS8TbEk2b/exec', {
       redirect: 'follow',
       method: 'POST',
@@ -210,9 +210,9 @@ function renderSuccess() {
   };
   // Событие просмотра финальной страницы
   if (typeof gtag === 'function') {
-    gtag('event', '5639_end_page_view_var1');
+    gtag('event', '5911_end_page_view_var9');
   }
-  sendYMEvent('5639_end_page_view_var1');
+  sendYMEvent('5911_end_page_view_var9');
 }
 
 // --- Инициализация ---
