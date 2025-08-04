@@ -91,7 +91,7 @@ function renderCalculator() {
   }
   sendYMEvent('5639_page_view_choose_loan_var1');
   app.innerHTML = `
-    <h2 class="screen-title">Получите до&nbsp;100&nbsp;000&nbsp;₽&nbsp;в&nbsp;рассрочку</h2>
+    <h2 class="screen-title">Получите до&nbsp;100&nbsp;000&nbsp;₽</h2>
     <p style="margin-bottom:24px;">Деньги придут на вашу карту. И не нужно идти в банк</p>
     <label for="amount" style="color:#888;font-size:1.1rem;">Введите сумму</label>
     <input id="amount" type="number" value="${state.amount}" autocomplete="off" />
@@ -145,7 +145,7 @@ function renderConfirm() {
     </div>
     <h1 class="screen-title-confirm">Всё проверьте, и можно оформлять</h1>
     <ul class="confirm-list">
-      <li><span class="label">Всего в рассрочку</span><span class="value">${formatMoney(state.amount)}</span></li>
+      <li><span class="label">Всего</span><span class="value">${formatMoney(state.amount)}</span></li>
       <li><span class="label">Плата за услугу</span><span class="value">${formatMoneyPrecise(state.serviceFee)}</span></li>
       <li><span class="label">Платёж в месяц</span><span class="value">${formatMoney(state.payment)}</span></li>
       <li><span class="label">Срок</span><span class="value">${state.term} месяцев</span></li>
